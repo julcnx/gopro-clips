@@ -1,0 +1,60 @@
+.progress-bar {
+  position: relative;
+  height: 20px;
+  background: #1e1e1e;
+  border-top: 1px solid #2a2a2a;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.pb-played {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #0d7be5;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.seg-overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: #e5a00d;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.pb-head {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.6);
+}
+
+.pb-in-marker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: #e5a00d;
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.snap-marker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: #6db046;
+  pointer-events: none;
+  transform: translateX(-1px);
+}

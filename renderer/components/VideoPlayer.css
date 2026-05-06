@@ -1,0 +1,204 @@
+.player-panel {
+  display: flex;
+  flex-direction: column;
+  background: #111;
+  overflow: hidden;
+}
+
+.video-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.video-el {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #161616;
+  border-top: 1px solid #2a2a2a;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.timecodes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  min-width: 200px;
+}
+
+.tc-current {
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.tc-sep {
+  color: #444;
+}
+
+.tc-total {
+  color: #666;
+}
+
+.chapter-badge {
+  font-size: 11px;
+  background: #2a2a2a;
+  color: #888;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+.controls-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ctrl-btn {
+  background: #2a2a2a;
+  border: none;
+  color: #bbb;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, color 0.1s;
+}
+
+.ctrl-btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+.play-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  background: #0d7be5;
+  color: #fff;
+}
+
+.play-btn:hover {
+  background: #0a6cc8;
+}
+
+.step-control {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 8px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 2px 4px;
+}
+
+.step-adj {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.step-adj:hover { color: #fff; background: #333; }
+
+.step-label {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #ccc;
+  min-width: 36px;
+  text-align: center;
+}
+
+.mark-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+  justify-content: flex-end;
+}
+
+.in-point-badge {
+  font-size: 11px;
+  color: #e5a00d;
+  font-variant-numeric: tabular-nums;
+}
+
+.mark-btn {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #ccc;
+  font-size: 12px;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.mark-btn:hover:not(:disabled) {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.mark-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.mark-btn-active {
+  border-color: #e5a00d;
+  color: #e5a00d;
+  background: #e5a00d18;
+}
+
+.snap-btn {
+  border-color: #0d7be5;
+  color: #0d7be5;
+}
+
+.snap-btn:hover {
+  background: #0d7be520 !important;
+}
+
+.keyboard-hint {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 5px 16px;
+  background: #0e0e0e;
+  border-top: 1px solid #1e1e1e;
+  flex-shrink: 0;
+}
+
+.keyboard-hint span {
+  font-size: 11px;
+  color: #444;
+}

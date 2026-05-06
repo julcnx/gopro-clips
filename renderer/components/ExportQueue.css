@@ -1,0 +1,84 @@
+.export-panel {
+  border-right: none;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #222;
+}
+
+.queue-type-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.queue-type-badge.snapshot {
+  background: #2a3a20;
+  color: #6db046;
+}
+
+.queue-type-badge.segment {
+  background: #1a2a40;
+  color: #4a9de5;
+}
+
+.queue-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-clip {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.queue-label {
+  font-size: 11px;
+  color: #666;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.export-footer {
+  padding: 12px;
+  border-top: 1px solid #2a2a2a;
+  flex-shrink: 0;
+}
+
+.export-btn {
+  width: 100%;
+}
+
+.export-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-bar-linear {
+  height: 4px;
+  background: #2a2a2a;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #0d7be5;
+  transition: width 0.2s;
+}
+
+.progress-label {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}

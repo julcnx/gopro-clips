@@ -1,0 +1,74 @@
+.recording-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 8px 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #222;
+  transition: background 0.1s;
+  user-select: none;
+}
+
+.recording-item:hover {
+  background: #242424;
+}
+
+.recording-item.selected {
+  background: #1a3050;
+  border-left: 3px solid #0d7be5;
+  padding-left: 11px;
+}
+
+.recording-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.recording-id {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ddd;
+  margin-bottom: 3px;
+}
+
+.recording-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: #666;
+}
+
+.recording-delete-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #444;
+  font-size: 15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+
+.recording-item:hover .recording-delete-btn {
+  opacity: 1;
+}
+
+.recording-delete-btn:hover:not(:disabled) {
+  color: #e55;
+  background: #2a1a1a;
+}
+
+.recording-delete-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.no-lrv {
+  color: #7a5020;
+  font-style: italic;
+}
