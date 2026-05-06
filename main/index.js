@@ -13,6 +13,7 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 let mainWindow
+let detectedSdPath = null
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -21,7 +22,7 @@ function createWindow() {
     minWidth: 1100,
     minHeight: 700,
     backgroundColor: '#1a1a1a',
-    titleBarStyle: 'hiddenInset',
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' } : {}),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -34,6 +35,12 @@ function createWindow() {
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (detectedSdPath) {
+      mainWindow?.webContents.send('sd-card-detected', detectedSdPath)
+    }
+  })
 }
 
 app.whenReady().then(() => {
@@ -77,14 +84,25 @@ app.whenReady().then(() => {
   })
 
   createWindow()
-  scanner.startWatching((sdPath) => {
+
+  const notifySdCardDetected = (sdPath) => {
+    detectedSdPath = sdPath
+    if (mainWindow?.webContents.isLoading()) return
     mainWindow?.webContents.send('sd-card-detected', sdPath)
+  }
+
+  for (const mountedSdPath of scanner.listMacDcimPaths()) {
+    notifySdCardDetected(mountedSdPath)
+  }
+
+  scanner.startWatching((sdPath) => {
+    notifySdCardDetected(sdPath)
   })
 })
 
 app.on('window-all-closed', () => {
   scanner.stopWatching()
-  if (process.platform !== 'darwin') app.quit()
+  app.quit()
 })
 
 app.on('activate', () => {

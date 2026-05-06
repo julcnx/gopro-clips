@@ -1,0 +1,22 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" rx="232" fill="url(#bg)"/>
+  <rect x="122" y="252" width="780" height="520" rx="128" fill="#10161F"/>
+  <rect x="176" y="316" width="672" height="392" rx="92" fill="#18212D" stroke="#314355" stroke-width="16"/>
+  <circle cx="512" cy="512" r="170" fill="#0D1420" stroke="#8EE7FF" stroke-width="28"/>
+  <circle cx="512" cy="512" r="108" fill="url(#lens)"/>
+  <circle cx="580" cy="450" r="30" fill="#D8FBFF" fill-opacity="0.84"/>
+  <rect x="218" y="198" width="186" height="82" rx="32" fill="#58D4FF"/>
+  <rect x="646" y="204" width="116" height="52" rx="26" fill="#2B3848"/>
+  <rect x="784" y="204" width="60" height="52" rx="26" fill="#2B3848"/>
+  <defs>
+    <linearGradient id="bg" x1="128" y1="72" x2="910" y2="962" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A2431"/>
+      <stop offset="1" stop-color="#0A111A"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(108)">
+      <stop stop-color="#5DE0FF"/>
+      <stop offset="0.52" stop-color="#168BCB"/>
+      <stop offset="1" stop-color="#0B2744"/>
+    </radialGradient>
+  </defs>
+</svg>

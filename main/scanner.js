@@ -2,31 +2,93 @@ const fs = require('fs')
 const path = require('path')
 const chokidar = require('chokidar')
 
+const WINDOWS_DRIVE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
 let watcher = null
+let pollTimer = null
+let knownDcimPaths = new Set()
+const MAC_VOLUMES_PATH = '/Volumes'
 
-// Watch /Volumes for new mounts with a DCIM folder (macOS)
+function getDcimPathForMount(mountPath, existsSync = fs.existsSync, pathModule = path) {
+  const dcimPath = pathModule.join(mountPath, 'DCIM')
+  return existsSync(dcimPath) ? dcimPath : null
+}
+
+function listWindowsDcimPaths(existsSync = fs.existsSync) {
+  return WINDOWS_DRIVE_LETTERS
+    .map((letter) => getDcimPathForMount(`${letter}:\\`, existsSync, path.win32))
+    .filter(Boolean)
+}
+
 function startWatching(onDetect) {
-  const volumesPath = '/Volumes'
-  if (!fs.existsSync(volumesPath)) return
+  stopWatching()
 
-  watcher = chokidar.watch(volumesPath, {
+  if (process.platform === 'darwin') {
+    startWatchingMacVolumes(onDetect)
+    return
+  }
+
+  if (process.platform === 'win32') {
+    startWatchingWindowsVolumes(onDetect)
+  }
+}
+
+function startWatchingMacVolumes(onDetect) {
+  if (!fs.existsSync(MAC_VOLUMES_PATH)) return
+
+  watcher = chokidar.watch(MAC_VOLUMES_PATH, {
     depth: 1,
     ignoreInitial: false,
     ignored: /(^|[/\\])\../,
   })
 
   watcher.on('addDir', (dirPath) => {
-    if (dirPath === volumesPath) return
-    const dcim = path.join(dirPath, 'DCIM')
-    if (fs.existsSync(dcim)) {
-      onDetect(dcim)
+    if (dirPath === MAC_VOLUMES_PATH) return
+    const dcimPath = getDcimPathForMount(dirPath)
+    if (dcimPath) {
+      onDetect(dcimPath)
     }
   })
+}
+
+function listMacDcimPaths(existsSync = fs.existsSync, readdirSync = fs.readdirSync, pathModule = path) {
+  if (!existsSync(MAC_VOLUMES_PATH)) return []
+
+  try {
+    return readdirSync(MAC_VOLUMES_PATH, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+      .map((entry) => getDcimPathForMount(pathModule.join(MAC_VOLUMES_PATH, entry.name), existsSync, pathModule))
+      .filter(Boolean)
+  } catch {
+    return []
+  }
+}
+
+function startWatchingWindowsVolumes(onDetect) {
+  const poll = () => {
+    const nextDcimPaths = new Set(listWindowsDcimPaths())
+
+    for (const dcimPath of nextDcimPaths) {
+      if (!knownDcimPaths.has(dcimPath)) {
+        onDetect(dcimPath)
+      }
+    }
+
+    knownDcimPaths = nextDcimPaths
+  }
+
+  poll()
+  pollTimer = setInterval(poll, 3000)
 }
 
 function stopWatching() {
   watcher?.close()
   watcher = null
+  if (pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+  }
+  knownDcimPaths = new Set()
 }
 
 // Scan a folder (DCIM root or subfolder) for GoPro MP4/LRV files
@@ -88,4 +150,11 @@ function parseGoProFilename(filename) {
   }
 }
 
-module.exports = { startWatching, stopWatching, scanFolder }
+module.exports = {
+  startWatching,
+  stopWatching,
+  scanFolder,
+  getDcimPathForMount,
+  listMacDcimPaths,
+  listWindowsDcimPaths,
+}

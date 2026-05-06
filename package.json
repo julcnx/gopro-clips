@@ -2,13 +2,22 @@
   "name": "gopro-clips",
   "version": "0.1.0",
   "description": "Desktop app to browse GoPro SD card recordings, preview proxy footage, and export clips and snapshots",
+  "author": "Julien Etienne <julien.etienne@intuiquest.com>",
+  "homepage": "https://github.com/julcnx/gopro-clips",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:julcnx/gopro-clips.git"
+  },
+  "license": "MIT",
   "main": "main/index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron\"",
+    "dev": "concurrently -k -n vite,electron --success command-electron \"npm run dev:vite\" \"npm run dev:electron\"",
     "dev:vite": "vite",
     "dev:electron": "wait-on http://localhost:5173 && electron .",
-    "build": "vite build && electron-builder",
+    "build": "vite build && electron-builder --mac --win",
+    "build:mac": "vite build && electron-builder --mac",
+    "build:win": "vite build && electron-builder --win",
     "preview": "vite preview"
   },
   "engines": {
@@ -33,8 +42,32 @@
   "build": {
     "appId": "com.gopro.clips",
     "productName": "GoPro Clips",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "buildResources": "build"
+    },
+    "copyright": "Copyright © 2026 Julien Etienne",
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "category": "public.app-category.video",
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "shortcutName": "GoPro Clips"
     },
     "files": [
       "dist/**/*",
