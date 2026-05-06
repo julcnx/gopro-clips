@@ -1,6 +1,6 @@
 {
   "name": "gopro-clips",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Desktop app to browse GoPro SD card recordings, preview proxy footage, and export clips and snapshots",
   "main": "main/index.js",
   "scripts": {
