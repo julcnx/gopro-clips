@@ -55,14 +55,16 @@ export default function App() {
   }
 
   async function handleDeleteRecording(recording) {
+    if (exportQueue.some((item) => item.recordingId === recording.recordingId)) return
     const { deleted } = await window.gopro.deleteRecording(recording)
     if (!deleted) return
-    setRecordings((rs) => rs.filter((r) => r.recordingId !== recording.recordingId))
+    const idx = recordings.findIndex((r) => r.recordingId === recording.recordingId)
+    const remaining = recordings.filter((r) => r.recordingId !== recording.recordingId)
+    setRecordings(remaining)
     if (selectedRecording?.recordingId === recording.recordingId) {
-      setSelectedRecording(null)
+      setSelectedRecording(remaining[idx] ?? remaining[idx - 1] ?? null)
       setInPoint(null)
     }
-    setExportQueue((q) => q.filter((item) => item.recordingId !== recording.recordingId))
   }
 
   const handleSnapshot = useCallback((snapshot) => {
@@ -127,6 +129,7 @@ export default function App() {
           onSegment={handleSegment}
           onNextRecording={handleNextRecording}
           onPrevRecording={handlePrevRecording}
+          onDeleteRecording={handleDeleteRecording}
         />
 
         <ExportQueue

@@ -19,7 +19,7 @@ function formatStep(s) {
 }
 
 const VideoPlayer = forwardRef(function VideoPlayer(
-  { recording, inPoint, onInPoint, onSnapshot, onSegment, onNextRecording, onPrevRecording },
+  { recording, inPoint, onInPoint, onSnapshot, onSegment, onNextRecording, onPrevRecording, onDeleteRecording },
   ref
 ) {
   const videoRef = useRef(null)
@@ -176,7 +176,7 @@ const VideoPlayer = forwardRef(function VideoPlayer(
           if (e.shiftKey) onPrevRecording()
           else onNextRecording()
           break
-        case 'KeyD':
+        case 'KeyV':
           e.preventDefault()
           if (inPoint === null) {
             onInPoint(globalTime)
@@ -186,6 +186,10 @@ const VideoPlayer = forwardRef(function VideoPlayer(
             if (start < end) addSegment(start, end)
             onInPoint(null)
           }
+          break
+        case 'KeyD':
+          e.preventDefault()
+          onDeleteRecording(recording)
           break
         case 'KeyS':
           e.preventDefault()
@@ -326,8 +330,8 @@ const VideoPlayer = forwardRef(function VideoPlayer(
                 onInPoint(null)
               }
             }}
-            title={inPoint === null ? 'Mark start (D)' : 'Mark end (D)'}
-          >D</button>
+            title={inPoint === null ? 'Mark start (V)' : 'Mark end (V)'}
+          >V</button>
           <button
             className="mark-btn snap-btn"
             onClick={() => addSnapshot(globalTime)}
@@ -340,8 +344,9 @@ const VideoPlayer = forwardRef(function VideoPlayer(
         <span>← → navigate</span>
         <span>↑ ↓ step size</span>
         <span>Space play/pause</span>
-        <span>D segment in/out</span>
+        <span>V segment in/out</span>
         <span>S snapshot</span>
+        <span>D delete recording</span>
         <span>Tab / ⇧Tab next/prev recording</span>
         <span>Esc cancel</span>
       </div>
