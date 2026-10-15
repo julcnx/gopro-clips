@@ -7,6 +7,17 @@ const fs = require('fs')
 ffmpegFluent.setFfmpegPath(ffmpegPath)
 ffmpegFluent.setFfprobePath(ffprobePath)
 
+// Re-encode exported clips to HEVC to keep file sizes down
+// (hardware encoder on macOS, libx265 elsewhere)
+const COMPRESS_OPTIONS = [
+  '-c:v', process.platform === 'darwin' ? 'hevc_videotoolbox' : 'libx265',
+  '-b:v', '6M',
+  '-tag:v', 'hvc1',
+  '-c:a', 'aac',
+  '-b:a', '128k',
+  '-map_metadata', '0',
+]
+
 function getDuration(filePath) {
   return new Promise((resolve) => {
     ffmpegFluent.ffprobe(filePath, (err, metadata) => {
@@ -66,7 +77,7 @@ function exportSegment(item, outputFolder) {
         .setFfmpegPath(ffmpegPath)
         .seekInput(item.inChapterOffset)
         .duration(duration)
-        .outputOptions(['-c copy'])
+        .outputOptions(COMPRESS_OPTIONS)
         .output(outPath)
         .on('end', () => resolve(outPath))
         .on('error', reject)
@@ -89,7 +100,7 @@ async function exportCrossChapterSegment(item, outputFolder, inTc, outTc) {
     ffmpegFluent(item.inChapterPath)
       .setFfmpegPath(ffmpegPath)
       .seekInput(item.inChapterOffset)
-      .outputOptions(['-c copy'])
+      .outputOptions(COMPRESS_OPTIONS)
       .output(part1Path)
       .on('end', resolve)
       .on('error', reject)
@@ -101,7 +112,7 @@ async function exportCrossChapterSegment(item, outputFolder, inTc, outTc) {
     ffmpegFluent(item.outChapterPath)
       .setFfmpegPath(ffmpegPath)
       .duration(item.outChapterOffset)
-      .outputOptions(['-c copy'])
+      .outputOptions(COMPRESS_OPTIONS)
       .output(part2Path)
       .on('end', resolve)
       .on('error', reject)
