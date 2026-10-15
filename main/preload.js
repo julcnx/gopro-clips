@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld('gopro', {
   onSdCardDetected: (cb) => ipcRenderer.on('sd-card-detected', (_e, path) => cb(path)),
 
   // Folder operations
-  scanFolder: (folderPath) => ipcRenderer.invoke('scan-folder', folderPath),
+  scanFolder: (folderPath, options) => ipcRenderer.invoke('scan-folder', folderPath, options),
   pickFolder: () => ipcRenderer.invoke('pick-folder'),
   pickExportFolder: () => ipcRenderer.invoke('pick-export-folder'),
 

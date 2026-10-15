@@ -91,10 +91,31 @@ function stopWatching() {
   knownDcimPaths = new Set()
 }
 
+function parseGenericMp4Filename(filename) {
+  const match = filename.match(/^(.+)\.(MP4)$/i)
+  if (!match) return null
+  return {
+    recordingId: match[1],
+    ext: 'MP4',
+  }
+}
+
 // Scan a folder (DCIM root or subfolder) for GoPro MP4/LRV files
 // Groups chapters into logical clips by the last 4 digits of filename
-function scanFolder(folderPath) {
+function scanFolder(folderPath, options = {}) {
+  const { allowGenericMp4 = false } = options
   const recordings = {}
+  let genericCounter = 1
+
+  function nextGenericRecordingId(baseName) {
+    const safeBase = (baseName || '').trim() || 'Clip'
+    let candidate = safeBase
+    while (recordings[candidate]) {
+      candidate = `${safeBase} (${genericCounter})`
+      genericCounter += 1
+    }
+    return candidate
+  }
 
   function walk(dir) {
     let entries
@@ -109,7 +130,19 @@ function scanFolder(folderPath) {
         walk(fullPath)
       } else if (entry.isFile()) {
         const parsed = parseGoProFilename(entry.name)
-        if (!parsed) continue
+
+        if (!parsed) {
+          if (!allowGenericMp4) continue
+          const generic = parseGenericMp4Filename(entry.name)
+          if (!generic) continue
+          const recordingId = nextGenericRecordingId(generic.recordingId)
+          recordings[recordingId] = {
+            recordingId,
+            chapters: [{ chapter: 1, path: fullPath }],
+            lrvChapters: [],
+          }
+          continue
+        }
 
         const { recordingId, chapter, ext } = parsed
         if (!recordings[recordingId]) {

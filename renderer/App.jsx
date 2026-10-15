@@ -21,8 +21,8 @@ export default function App() {
     })
   }, [])
 
-  async function loadFolder(folderPath) {
-    const found = await window.gopro.scanFolder(folderPath)
+  async function loadFolder(folderPath, options) {
+    const found = await window.gopro.scanFolder(folderPath, options)
     setRecordings(found)
     setSelectedRecording(null)
   }
@@ -31,7 +31,7 @@ export default function App() {
     const picked = await window.gopro.pickFolder()
     if (picked) {
       setSdPath(picked)
-      loadFolder(picked)
+      loadFolder(picked, { allowGenericMp4: true })
     }
   }
 

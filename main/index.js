@@ -110,8 +110,8 @@ app.on('activate', () => {
 })
 
 // IPC: scan a folder for GoPro clips
-ipcMain.handle('scan-folder', async (_event, folderPath) => {
-  return scanner.scanFolder(folderPath)
+ipcMain.handle('scan-folder', async (_event, folderPath, options) => {
+  return scanner.scanFolder(folderPath, options)
 })
 
 // IPC: open folder picker dialog
